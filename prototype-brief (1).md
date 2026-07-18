@@ -93,10 +93,32 @@ Header with avatar+name (different header variant, no info icon).
 Date divider, incoming/outgoing bubbles, image+text message type,
 fixed input bar with send.
 
+### ✅ Login
+Photo collage (2×3 grid, brand logo centered), "Iniciar sesión" heading,
+Usuario/Contrasinal form fields (password visibility toggle), "Gardar
+datos de acceso" checkbox, "INICIAR SESIÓN" button (navy + accent-yellow
+arrow), "Olvidaches o teu contrasinal?" link, legal text with 2 inline
+links. Copy is in Galician — kept as-is. **Values approximated from
+screenshot — Figma MCP hit the Starter plan rate limit before exact
+values could be pulled (node 14752:4855). Revisit for fine-tuning
+(navy shade, accent yellow, input border, corner radii) once the limit
+resets.**
+
+### ✅ Gestión
+Administrative/account hub (distinct from operational screens). Vertical
+list of rows: Perfil, Facturación y pagos, Contratos de servicio,
+Documentos y autorizaciones, Notificaciones, Ajustes generales, Cerrar
+sesión (separated, danger color, no chevron). Perfil row shares the same
+destination as the Dashboard avatar shortcut. Most sub-screens are stubs
+for this pass — priority is validating navigation structure. See
+`gestion-prompt.md` for the full prompt.
+
 ### 🚧 Not yet specced
 - **Renuncia flow** — tray option exists, no screen built yet.
 - **Inicio** (home screen)
-- **Gestión** screen
+- **Perfil, Facturación, Contratos, Documentos, Notificaciones, Ajustes**
+  — currently stub routes linked from Gestión, not yet designed/specced
+  individually.
 
 ---
 
@@ -111,6 +133,7 @@ fixed input bar with send.
 | Asistencia Tray | Triggered from nav bar | Gluestack `Actionsheet` pattern; exact values from node 14756:10091; backdrop `#2c3761` @80%, slide-up |
 | Asistencia FAB (nav) | Bottom nav bar | Exact values from node 14797:22410; 59×61px circle, `#565f81`, overlaps nav top edge by 18px — **see open issue below** |
 | Bottom nav bar (flat tabs) | All screens | 5 tabs, active state = Poppins ExtraBold label + filled icon; Asistencia slot conflicts with FAB — see below |
+| Settings-row list item | Gestión | Icon + label + chevron, rounded card with hairline border; reusable for any future "list of options" screen |
 
 ---
 

@@ -1727,3 +1727,240 @@ button.avatar:active { box-shadow: 0 0 0 3px var(--color-secondary-50); }
   color: var(--color-primary-500);
   opacity: var(--opacity-50);
 }
+
+/* =======================================================================
+   LOGIN (screens/login.html)
+   No Figma source at all this pass — MCP rate-limited before any data
+   came back. Every value below is a best-effort build from spec text,
+   not a confirmed pixel value. See handoff.md.
+   ======================================================================= */
+
+.login-view {
+  padding-bottom: var(--space-8); /* no bottom nav on this screen — the generic 75px+ clearance doesn't apply */
+  gap: 0;
+}
+
+.login-collage {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: repeat(6, 1fr);
+  gap: 3px; /* OBSERVED, one-off — thin gap between collage tiles matching the reference screenshot */
+  height: 260px;
+}
+.login-collage__photo {
+  overflow: hidden;
+}
+.login-collage__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Irregular placement matching the reference screenshot — tennis and
+   hiking run taller than pasta/bus, not a uniform grid. See handoff.md. */
+.login-collage__photo--salad  { grid-column: 1; grid-row: 1 / 4; }
+.login-collage__photo--hiking { grid-column: 1; grid-row: 4 / 7; }
+.login-collage__photo--pasta  { grid-column: 2; grid-row: 1 / 3; }
+.login-collage__photo--bus    { grid-column: 2; grid-row: 5 / 7; }
+.login-collage__photo--tennis { grid-column: 3; grid-row: 1 / 5; }
+.login-collage__photo--fruit  { grid-column: 3; grid-row: 5 / 7; }
+
+.login-collage__logo {
+  grid-column: 2;
+  grid-row: 3 / 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background-color: var(--color-background-card);
+}
+.login-collage__logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.login-form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+}
+
+.login-heading {
+  margin: 0;
+  text-align: center;
+  font-size: var(--heading-md-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-900);
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.login-field__label {
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-900);
+}
+.login-field__input {
+  width: 100%;
+  height: 48px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border-300);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-background-card);
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm-size);
+  color: var(--color-text-900);
+}
+.login-field__input::placeholder { color: var(--color-primary-200); }
+.login-field__input:focus-visible {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 1px;
+}
+.login-field__password-wrap {
+  position: relative;
+}
+.login-field__input--password {
+  padding-right: 48px; /* clears the eye-toggle button */
+}
+.login-field__toggle {
+  position: absolute;
+  right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-primary-300);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.login-field__toggle:hover { background-color: var(--color-secondary-0); color: var(--color-secondary-500); }
+.login-field__toggle svg { width: 20px; height: 20px; }
+
+.login-form__error {
+  margin: 0;
+  font-size: var(--text-xs-size);
+  color: var(--color-danger);
+}
+
+.login-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+  width: fit-content;
+}
+.login-checkbox input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.login-checkbox__box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--color-border-300);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-background-card);
+  color: var(--color-typography-white);
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+.login-checkbox__box svg { display: none; width: 14px; height: 14px; }
+.login-checkbox input:checked + .login-checkbox__box {
+  background-color: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+}
+.login-checkbox input:checked + .login-checkbox__box svg { display: block; }
+.login-checkbox input:focus-visible + .login-checkbox__box {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 2px;
+}
+.login-checkbox__label {
+  font-size: var(--text-sm-size);
+  color: var(--color-text-900);
+}
+
+.login-submit {
+  position: relative;
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-900);
+  transition: background-color 120ms ease;
+}
+.login-submit:hover { background-color: var(--color-primary-500); }
+.login-submit__label {
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+  color: var(--color-typography-white);
+  text-transform: uppercase;
+}
+.login-submit__arrow {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-yellow);
+  color: var(--color-primary-900);
+}
+.login-submit__arrow svg { width: 22px; height: 22px; }
+
+.login-forgot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+}
+.login-forgot__rule {
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-border-100);
+}
+.login-forgot a {
+  flex-shrink: 0;
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-secondary-500);
+  white-space: nowrap;
+}
+
+.login-legal {
+  margin: 0;
+  text-align: center;
+  font-size: var(--text-2xs-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-primary-200);
+}
+.login-legal a {
+  color: var(--color-primary-200);
+  text-decoration: underline;
+}

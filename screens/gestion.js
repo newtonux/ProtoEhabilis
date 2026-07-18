@@ -69,7 +69,12 @@ screenContent.addEventListener('click', (event) => {
   if (logoutButton) {
     // Native confirm() is fine for the prototype, per spec.
     if (window.confirm('¿Seguro que quieres cerrar sesión?')) {
-      console.log('[Gestión] Mock logout confirmed — no real auth, no-op.');
+      console.log('[Gestión] Mock logout confirmed — no real auth.');
+      // login.html didn't exist when this handler was first written —
+      // now that it does, send the user there instead of leaving
+      // "confirm" as a dead end. Not part of the original Gestión spec,
+      // but the obvious destination now that both pieces exist.
+      window.location.href = '../login.html';
     }
     return;
   }

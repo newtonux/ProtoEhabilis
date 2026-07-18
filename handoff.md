@@ -539,4 +539,100 @@ Only Gestión's own list screen is "real" — all 6 destinations are
 placeholder pages, exactly as scoped ("priority for this pass is
 validating the navigation structure and list pattern, not building out
 every sub-screen yet"). Logout shows a native `confirm()` and
-`console.log`s on confirmation — no real auth, per spec.
+`console.log`s on confirmation — no real auth, per spec. It now also
+navigates to `login.html` on confirm (see that screen's section below) —
+added when login.html was built in a later pass, since leaving a
+confirmed logout as a dead end no longer made sense once a real
+destination existed.
+
+---
+
+# Login
+
+`login.html` — lives at the **project root**, not `/screens/`, so it
+resolves at `localhost:8934/login.html`. Moved there in a follow-up pass
+(originally built under `/screens/` like every other screen); every
+internal relative path (`tokens.css`, `styles.css`, the post-login
+redirect to `index.html`) was updated accordingly, and Gestión's
+"Cerrar sesión" handler (`screens/gestion.js`) now points at
+`../login.html` to match. `login.js` moved with it and stayed alongside
+its HTML, same pattern as every other screen.
+
+**No Figma data at all for this screen** — the MCP rate limit was hit
+before design context, screenshot, *or* variables came back (worse than
+Solicitar Asistencia's partial hit earlier, which at least got the
+Default screen's real values before running out). Layout/color/spacing
+choices not covered by your reference screenshot (see below) are still
+best-effort spec-text guesses, checked against nothing.
+
+## Collage: real photos now, per your reference screenshot
+You attached a screenshot of the real, finished collage — that became
+the source of truth for this component specifically, superseding the
+"5 photo cells" ambiguity flagged in the original build (a 2-row/3-col
+grid with a row-spanning center literally can't produce 5 photo cells;
+your screenshot resolved it by showing it's **6 photos**, not 5, in an
+**irregular masonry layout**, not a uniform grid — tennis and hiking run
+taller than pasta/logo/bus).
+
+**I can't extract images from a chat attachment onto disk** — no tool
+available to this agent pulls image bytes out of a pasted screenshot
+into a file. You're dropping the 6 photos + the real logo into `assets/`
+yourself; `login.js` and `styles.css` are wired to expect these exact
+filenames:
+
+| File | Content |
+|---|---|
+| `assets/collage-salad.jpg` | kid eating salad |
+| `assets/collage-pasta.jpg` | kids eating pasta |
+| `assets/collage-tennis.jpg` | tennis lesson |
+| `assets/collage-hiking.jpg` | hikers on trail |
+| `assets/collage-bus.jpg` | bus excursion |
+| `assets/collage-fruit.jpg` | fruit salad bowl |
+| `assets/logo-ehabilis.png` | eHabilis logo + wordmark |
+
+Until those files exist, each collage cell shows a browser's default
+broken-image icon — deliberately not caught with an `onerror` fallback,
+so a missing file is obvious rather than silently rendering as an empty
+gray box that could be mistaken for "working as intended." The old
+inline-SVG illustrations (crafts/sport/reading/music) and the abstract
+placeholder logo mark are gone entirely, not kept as a fallback — once
+real content was specified, keeping invented content alongside it would
+just be confusing dead weight.
+
+**Grid mechanics**: 3 columns × 6 fine-grained row-tracks (not 2), each
+photo `grid-row`-spanning however many of those 6 tracks its cell needs
+(salad/hiking split the left column 50/50; pasta/logo/bus split the
+center column into thirds; tennis/fruit split the right column
+roughly 2/3–1/3, tennis being the taller one) — this is what lets the
+layout be irregular while still being a single CSS Grid, no manual
+absolute positioning. Photos use `object-fit: cover` so whatever
+aspect ratio your actual files are, they'll crop to fill their cell
+rather than distorting.
+
+## Other invented content (unrelated to the collage)
+- **Eye/eye-off, right-arrow, and checkmark icons**: inline SVGs built from scratch, same reasoning as every other icon in this project built without a Figma source (Gestión's row icons, the mood faces, etc.).
+- **Accent yellow** (`--color-accent-yellow`, `#f5c242`): invented to be visibly distinct from the existing `--color-tertiary-500` (`#ddb54a`, the app's existing muted "food" gold) so the arrow badge reads as a punchy CTA accent rather than blending into that unrelated existing token's role. Input border reuses the already-existing `--color-border-300` — no new token was needed for that half of the instruction.
+
+## Mixed-language content, kept as given
+Every other string on this screen ("Usuario", "Contrasinal", "Gardar
+datos de acceso", "Olvidaches o teu contrasinal?") is Galician; the
+legal paragraph you gave is Castilian Spanish ("Si continúas, aceptas
+los Términos del Servicio..."). Reproduced **exactly as given**, not
+normalized to one language — this reads like legal/compliance copy that
+stays centrally maintained in Spanish regardless of UI locale, a
+plausible real-world pattern, not an error to silently "fix". Flag with
+content/legal if that's wrong. The page's `<html lang="gl">` reflects
+the majority-Galician content; every other screen in this project uses
+`lang="es"`.
+
+## Standalone screen — no shared chrome
+Login doesn't use `menu-shared.js` at all (no header pattern, no bottom
+nav, no profile card fit a pre-authentication screen) — built entirely
+in its own `login.js`, similar to how Chat's conversation screen went
+fully custom rather than stretching `mountSimpleScreenChrome()`.
+
+## Interactions
+- Password field: click the eye icon to toggle `type="password"`/`type="text"`, icon swaps between eye/eye-off.
+- "Gardar datos de acceso" checkbox: pre-checked by default per spec, tracked in a `rememberMe` variable (not persisted anywhere — mock only).
+- Submit: both fields non-empty → `console.log`s a mock payload and navigates to `index.html` (Home/Inicio — treated as "the entry point" per your either/or, since it's literally this prototype's root file; both now live at the root, so no `../` needed). Either field empty → inline error text shown, no navigation, per spec.
+- "Olvidaches o teu contrasinal?" and both legal links: `console.log` only, no destination screens — flagged in code, not silently inert.

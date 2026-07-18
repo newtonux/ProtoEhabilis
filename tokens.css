@@ -38,6 +38,8 @@
   --color-tertiary-500: #ddb54a;  /* CONFIRMED (breakfast icon accent, allergen chip checkmarks) */
   --color-tertiary-50:  #f1e1b7; /* CONFIRMED — allergen chip background (Menú Semanal) */
 
+  --color-accent-yellow: #f5c242; /* OBSERVED, invented — no Figma source this pass (rate-limited before any data returned). Login's arrow-badge accent. Deliberately a brighter/more saturated yellow than --color-tertiary-500 (#ddb54a) so it reads as a punchy CTA accent rather than the app's existing muted "food" gold — see handoff.md. */
+
   --color-neutral-600: #747474;  /* CONFIRMED ("Background/background600") — muted chevron-right / disclosure affordance */
   --color-warning-800: #824417;  /* CONFIRMED ("Warning/warning800") — Asistencia tray alert icon */
 

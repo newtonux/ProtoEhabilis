@@ -253,3 +253,40 @@ placeholder destinations (`perfil.html`, `facturacion.html`,
 - **`--color-danger` added as a semantic alias** for the existing (previously off-system-flagged) `--color-error-500` — reused per instruction rather than duplicated.
 - **Dead `SCREEN_TITLES` entries cleaned up in `main.js`** while touching that file for Gestión's own redirect — several tab ids had become unreachable placeholder-title lookups across earlier passes as those tabs got real screens one at a time. Not part of this request, but caught in passing.
 - All 6 stub destinations are genuinely empty placeholders, per spec — "priority for this pass is validating the navigation structure and list pattern, not building out every sub-screen yet."
+
+---
+
+# Login
+
+Scope: `login.html` — moved to the project root in a follow-up pass so
+it resolves at `localhost:8934/login.html` (every other screen lives
+under `/screens/`). **Zero Figma data this pass** — the MCP rate limit
+was hit before design context, screenshot, or variables returned
+anything at all. The collage now uses real photos per your reference
+screenshot rather than invented placeholders — see handoff.md for the
+exact filenames it expects in `assets/`.
+
+## 🟢 Maps to a Gluestack v5 primitive
+
+| Component | Gluestack primitive | Notes |
+|---|---|---|
+| Text/email input | `Input` + `InputField` | Standard labeled field. |
+| Password input | `Input` + `InputField` + `InputSlot`/`InputIcon` | The eye-toggle icon sits inside the field via a trailing slot — a documented Gluestack pattern. |
+| Checkbox | `Checkbox` + `CheckboxIndicator` + `CheckboxLabel` | Custom-styled box + checkmark, native input visually hidden but still focusable/accessible. |
+| Submit button | `Button` | Pill, dark navy, with a nested circular icon accent. |
+
+## 🟠 Custom / from-scratch components
+
+| Component | Why it's custom | Build notes |
+|---|---|---|
+| **Photo collage grid** | Irregular masonry layout, not a uniform grid — no standard component covers this shape. | 3 columns × 6 fine-grained row-tracks, each of the 6 real photos + the logo cell spanning however many tracks its cell needs. Built to match your reference screenshot exactly (tennis/hiking taller than pasta/logo/bus). |
+| **Arrow-badge submit button** | Not a standard single-element button — a circular icon accent overlapping the pill button's edge. | Absolutely positioned circular badge (`--color-accent-yellow` background) inside the button, per spec's "small circular accent-yellow button ... on the right edge." |
+
+## ⚠️ Flags for dev handoff (see handoff.md for full detail)
+
+- **No Figma source at all** — re-verify every non-photo value (spacing, icons, form styling) against a real design file before treating any of it as final. The collage itself is now grounded in your reference screenshot, but everything else on this screen is still an unconfirmed spec-text guess.
+- **Collage depends on 7 files existing in `assets/`** (6 photos + the real logo) — this agent can't extract images from a chat attachment onto disk, so you're adding those files yourself. Exact expected filenames are in handoff.md. Until they exist, those cells show broken-image icons on purpose (not silently hidden).
+- **Mixed-language content kept exactly as given**: the form labels are Galician, the legal paragraph is Castilian Spanish — reproduced verbatim, not normalized to one language.
+- **`--color-accent-yellow` is entirely invented** (no Figma source), deliberately distinct from the existing `--color-tertiary-500` so it doesn't blend into that token's unrelated existing role.
+- **`login.html` lives at the project root**, not `/screens/` — the only screen in the project structured this way, per your request that it resolve at `localhost:8934/login.html`.
+- **Gestión's "Cerrar sesión" now navigates to `../login.html`** after the mock confirm — a small addition made once this screen existed, since a logout that confirmed but went nowhere was a dead end. Not part of either spec individually, but the obvious connective step once both pieces existed.
