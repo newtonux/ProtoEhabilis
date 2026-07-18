@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototype — Home Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="device-frame">
+
+  <!-- Decorative device chrome only — not part of the app UI, ignore when building the real app -->
+  <div class="status-bar" aria-hidden="true">
+    <span class="status-bar__time">9:41</span>
+    <span class="status-bar__icons">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="2.5" width="3" height="9.5" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 12C6.3 12 4.7 11.4 3.4 10.3L4.7 8.7C5.6 9.5 6.8 10 8 10C9.2 10 10.4 9.5 11.3 8.7L12.6 10.3C11.3 11.4 9.7 12 8 12ZM1.2 6.5C3 4.9 5.4 4 8 4C10.6 4 13 4.9 14.8 6.5L13.5 8.1C12 6.8 10.1 6 8 6C5.9 6 4 6.8 2.5 8.1L1.2 6.5Z" fill="currentColor"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><rect x="22.5" y="4" width="1.5" height="4" rx="0.75" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <div class="app-shell">
+    <main class="app-view" id="app-view" tabindex="-1"></main>
+
+    <div class="institution-footer" aria-hidden="true">
+      <img src="assets/logo-institution.png" alt="" class="institution-footer__logo">
+    </div>
+
+    <nav class="bottom-nav" id="bottom-nav" aria-label="Navegación principal">
+      <button class="nav-item" type="button" data-screen="home" aria-current="page">
+        <img class="nav-item__icon" src="assets/icon-nav-home.svg" alt="">
+        <span class="nav-item__label">Inicio</span>
+      </button>
+      <button class="nav-item" type="button" data-screen="menus">
+        <img class="nav-item__icon" src="assets/icon-nav-menus.svg" alt="">
+        <span class="nav-item__label">Menús</span>
+      </button>
+      <button class="nav-item nav-item--asistencia" type="button" data-screen="asistencia">
+        <span class="nav-item__icon" aria-hidden="true"></span>
+        <span class="nav-item__label">Asistencia</span>
+      </button>
+      <button class="nav-item" type="button" data-screen="chat">
+        <img class="nav-item__icon" src="assets/icon-nav-chat.svg" alt="">
+        <span class="nav-item__label">Chat</span>
+      </button>
+      <button class="nav-item" type="button" data-screen="gestion">
+        <img class="nav-item__icon" src="assets/icon-nav-gestion.svg" alt="">
+        <span class="nav-item__label">Gestión</span>
+      </button>
+    </nav>
+  </div>
+</div>
+
+<!-- ===================== SCREEN TEMPLATES ===================== -->
+
+<template id="screen-home">
+  <header class="app-header">
+    <p class="app-header__greeting">
+      Buenos días <span class="app-header__wave">👋</span>
+      <span class="app-header__name">Juan</span>
+    </p>
+    <div class="app-header__actions">
+      <button class="icon-button" type="button" data-action="open-notifications" aria-haspopup="dialog" aria-label="Notificaciones (3 sin leer)">
+        <img src="assets/icon-bell.svg" alt="" class="icon-button__icon">
+        <span class="badge badge--count">3</span>
+      </button>
+      <button class="avatar avatar--sm" type="button" data-action="open-profile" aria-label="Perfil de Juan">
+        <img src="assets/avatar-header.svg" alt="" class="avatar__image">
+      </button>
+    </div>
+  </header>
+
+  <div class="card-list">
+
+    <section class="card student-card" aria-label="Lucía Martínez Crespo">
+      <div class="student-row">
+        <span class="avatar avatar--md">
+          <img src="assets/avatar-placeholder.jpg" alt="" class="avatar__image">
+        </span>
+        <div class="student-row__info">
+          <p class="student-row__name">Lucía Martínez Crespo</p>
+          <p class="student-row__meta">
+            <span class="student-row__meta-item">CEIP Pío XII 3</span>
+            <span class="student-row__meta-item">Primero</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="service-accordion">
+        <div class="service-row">
+          <img src="assets/icon-breakfast.svg" alt="" class="service-row__icon">
+          <span class="service-row__text">
+            <span class="service-row__label">DESAYUNO</span>
+            <span class="service-row__value">Horario entrega: 7:00 - 7:30h</span>
+          </span>
+          <button class="service-row__toggle" type="button" data-action="toggle-service" aria-expanded="false" aria-label="Mostrar accesos rápidos para desayuno">
+            <span class="service-row__chevron-wrap">
+              <img src="assets/icon-chevron.svg" alt="" class="service-row__chevron">
+            </span>
+          </button>
+        </div>
+        <div class="service-panel" hidden role="group" aria-label="Accesos rápidos">
+          <button class="nav-item" type="button" data-action="quicklink" data-target="menus">
+            <img class="nav-item__icon" src="assets/icon-nav-menus.svg" alt="">
+            <span class="nav-item__label">Menús</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="asistencia">
+            <img class="nav-item__icon" src="assets/icon-nav-calendar.svg" alt="">
+            <span class="nav-item__label">Asistencia</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="autorizados">
+            <img class="nav-item__icon" src="assets/icon-quicklink-autorizados.svg" alt="">
+            <span class="nav-item__label">Autorizados</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="chat">
+            <img class="nav-item__icon" src="assets/icon-nav-chat.svg" alt="">
+            <span class="nav-item__label">Chat</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="service-accordion">
+        <div class="service-row">
+          <img src="assets/icon-food.svg" alt="" class="service-row__icon">
+          <span class="service-row__text">
+            <span class="service-row__label">COMIDA</span>
+            <span class="service-row__value">Horario recogida: 17:00 - 17:30h</span>
+          </span>
+          <button class="service-row__toggle" type="button" data-action="toggle-service" aria-expanded="false" aria-label="Mostrar accesos rápidos para comida">
+            <span class="service-row__chevron-wrap">
+              <img src="assets/icon-chevron.svg" alt="" class="service-row__chevron">
+            </span>
+          </button>
+        </div>
+        <div class="service-panel" hidden role="group" aria-label="Accesos rápidos">
+          <button class="nav-item" type="button" data-action="quicklink" data-target="menus">
+            <img class="nav-item__icon" src="assets/icon-nav-menus.svg" alt="">
+            <span class="nav-item__label">Menús</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="asistencia">
+            <img class="nav-item__icon" src="assets/icon-nav-calendar.svg" alt="">
+            <span class="nav-item__label">Asistencia</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="autorizados">
+            <img class="nav-item__icon" src="assets/icon-quicklink-autorizados.svg" alt="">
+            <span class="nav-item__label">Autorizados</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="chat">
+            <img class="nav-item__icon" src="assets/icon-nav-chat.svg" alt="">
+            <span class="nav-item__label">Chat</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card student-card" aria-label="Daniel Martínez Crespo">
+      <div class="student-row">
+        <span class="avatar avatar--md">
+          <img src="assets/avatar-daniel.svg" alt="" class="avatar__image">
+        </span>
+        <div class="student-row__info">
+          <p class="student-row__name">Daniel Martínez Crespo</p>
+          <p class="student-row__meta">
+            <span class="student-row__meta-item">CEIP Pío XII 3</span>
+            <span class="student-row__meta-item">Segundo</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="service-accordion">
+        <div class="service-row">
+          <img src="assets/icon-breakfast.svg" alt="" class="service-row__icon">
+          <span class="service-row__text">
+            <span class="service-row__label">DESAYUNO</span>
+            <span class="service-row__value">Horario entrega: 7:00 - 7:30h</span>
+          </span>
+          <button class="service-row__toggle" type="button" data-action="toggle-service" aria-expanded="false" aria-label="Mostrar accesos rápidos para desayuno">
+            <span class="service-row__chevron-wrap">
+              <img src="assets/icon-chevron.svg" alt="" class="service-row__chevron">
+            </span>
+          </button>
+        </div>
+        <div class="service-panel" hidden role="group" aria-label="Accesos rápidos">
+          <button class="nav-item" type="button" data-action="quicklink" data-target="menus">
+            <img class="nav-item__icon" src="assets/icon-nav-menus.svg" alt="">
+            <span class="nav-item__label">Menús</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="asistencia">
+            <img class="nav-item__icon" src="assets/icon-nav-calendar.svg" alt="">
+            <span class="nav-item__label">Asistencia</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="autorizados">
+            <img class="nav-item__icon" src="assets/icon-quicklink-autorizados.svg" alt="">
+            <span class="nav-item__label">Autorizados</span>
+          </button>
+          <button class="nav-item" type="button" data-action="quicklink" data-target="chat">
+            <img class="nav-item__icon" src="assets/icon-nav-chat.svg" alt="">
+            <span class="nav-item__label">Chat</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</template>
+
+<template id="screen-placeholder">
+  <header class="app-header app-header--simple">
+    <p class="placeholder-title"></p>
+  </header>
+  <div class="placeholder-body">
+    <p class="placeholder-body__text">Esta pantalla no está en el alcance de esta fase del prototipo todavía.</p>
+  </div>
+</template>
+
+<template id="notifications-panel">
+  <div class="sheet-backdrop" data-action="close-notifications">
+    <div class="sheet" role="dialog" aria-label="Notificaciones" aria-modal="true">
+      <div class="sheet__handle" aria-hidden="true"></div>
+      <h2 class="sheet__title">Notificaciones</h2>
+      <ul class="notification-list">
+        <li class="notification-item">
+          <span class="notification-item__dot" aria-hidden="true"></span>
+          <div>
+            <p class="notification-item__title">Menú de la semana disponible</p>
+            <p class="notification-item__meta">Hace 2 horas</p>
+          </div>
+        </li>
+        <li class="notification-item">
+          <span class="notification-item__dot" aria-hidden="true"></span>
+          <div>
+            <p class="notification-item__title">Recordatorio: confirma la comida de Lucía</p>
+            <p class="notification-item__meta">Ayer</p>
+          </div>
+        </li>
+        <li class="notification-item">
+          <span class="notification-item__dot" aria-hidden="true"></span>
+          <div>
+            <p class="notification-item__title">Nuevo mensaje del centro</p>
+            <p class="notification-item__meta">Ayer</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script src="asistencia-tray.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

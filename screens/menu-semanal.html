@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototype — Menú Semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@400;600&family=Hanken+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<div class="device-frame">
+
+  <!-- Decorative device chrome only — not part of the app UI -->
+  <div class="status-bar" aria-hidden="true">
+    <span class="status-bar__time">9:41</span>
+    <span class="status-bar__icons">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="none"><rect x="0" y="7" width="3" height="5" rx="0.5" fill="currentColor"/><rect x="5" y="5" width="3" height="7" rx="0.5" fill="currentColor"/><rect x="10" y="2.5" width="3" height="9.5" rx="0.5" fill="currentColor"/><rect x="15" y="0" width="3" height="12" rx="0.5" fill="currentColor"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 12C6.3 12 4.7 11.4 3.4 10.3L4.7 8.7C5.6 9.5 6.8 10 8 10C9.2 10 10.4 9.5 11.3 8.7L12.6 10.3C11.3 11.4 9.7 12 8 12ZM1.2 6.5C3 4.9 5.4 4 8 4C10.6 4 13 4.9 14.8 6.5L13.5 8.1C12 6.8 10.1 6 8 6C5.9 6 4 6.8 2.5 8.1L1.2 6.5Z" fill="currentColor"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor"/><rect x="2" y="2" width="18" height="8" rx="1.5" fill="currentColor"/><rect x="22.5" y="4" width="1.5" height="4" rx="0.75" fill="currentColor"/></svg>
+    </span>
+  </div>
+
+  <div class="app-shell">
+    <main class="app-view" id="app-view" tabindex="-1"></main>
+  </div>
+</div>
+
+<!-- Shared header, popover, profile card, toggle, day selector, bottom
+     nav all live in menu-shared.js — see handoff.md for why. -->
+<script src="menu-shared.js"></script>
+<script src="menu-semanal.js"></script>
+<!-- Loaded last: mountMenuChrome() above must build .bottom-nav first,
+     since this script's init looks for it immediately (not via a
+     DOM-ready observer). See handoff.md. -->
+<script src="../asistencia-tray.js"></script>
+</body>
+</html>

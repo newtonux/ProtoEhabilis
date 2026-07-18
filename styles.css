@@ -1,0 +1,1729 @@
+/*
+  styles.css — built entirely from tokens.css custom properties.
+  No raw hex/px values below except where explicitly noted as prototype-only
+  device chrome (the outer phone frame / status bar), which isn't part of
+  the Gluestack handoff.
+*/
+
+/* ---------------------------------------------------------------------
+   RESET / BASE
+--------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family-base);
+  color: var(--color-text-900);
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9d9d9; /* prototype workbench backdrop, not a token — purely so the phone frame reads clearly on a desktop browser */
+  padding: var(--space-8) 0;
+}
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 2px;
+}
+img { display: block; max-width: 100%; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+/* ---------------------------------------------------------------------
+   DEVICE FRAME (prototype chrome only)
+--------------------------------------------------------------------- */
+.device-frame {
+  width: var(--frame-width);
+  height: var(--frame-height);
+  background: var(--color-background-app);
+  border-radius: 40px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  flex-shrink: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-6);
+  color: var(--color-primary-900);
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-semibold);
+}
+.status-bar__icons { display: flex; align-items: center; gap: var(--space-1); }
+
+.app-shell {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------------------
+   APP VIEW (scrollable, swapped per screen)
+--------------------------------------------------------------------- */
+.app-view {
+  position: relative;
+  z-index: 1; /* stacks above institution-footer (z-index: 0) so opaque cards occlude the logo watermark when they overlap it, while empty/transparent gaps still let it show through */
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: calc(75px + var(--space-6)); /* clears the floating bottom nav */
+}
+.app-view:focus { outline: none; }
+
+/* ---------------------------------------------------------------------
+   HEADER
+--------------------------------------------------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+}
+.app-header__greeting {
+  font-size: 0;
+  line-height: normal;
+}
+.app-header__greeting,
+.app-header__name {
+  font-family: var(--font-family-base);
+}
+.app-header__greeting {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-xl-size);
+  color: var(--color-primary-500);
+}
+.app-header__wave { font-family: var(--font-family-alt); font-size: var(--text-xl-size); }
+.app-header__name {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-md-size);
+  color: var(--color-secondary-300);
+}
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+.app-header--simple {
+  justify-content: flex-start;
+}
+.placeholder-title {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-xl-size);
+  color: var(--color-primary-500);
+  text-transform: capitalize;
+}
+.placeholder-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  color: var(--color-primary-500);
+  opacity: var(--opacity-50);
+}
+
+/* ---------------------------------------------------------------------
+   ICON BUTTON + BADGE
+--------------------------------------------------------------------- */
+.icon-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease;
+}
+.icon-button:hover { background-color: var(--color-secondary-0); }
+.icon-button:active { background-color: var(--color-secondary-50); }
+.icon-button__icon { width: 26px; height: 26px; }
+
+.badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4.5px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-typography-white);
+}
+.badge--count { background-color: var(--color-error-500); }
+
+/* ---------------------------------------------------------------------
+   AVATAR
+--------------------------------------------------------------------- */
+.avatar {
+  display: block;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background-color: var(--color-primary-500);
+  flex-shrink: 0;
+}
+.avatar__image { width: 100%; height: 100%; object-fit: cover; }
+.avatar--sm { width: var(--space-12); height: var(--space-12); } /* header avatar, 48px */
+.avatar--md { width: var(--space-12); height: var(--space-12); } /* student row avatar, 48px */
+.avatar--xs { width: 36px; height: 36px; } /* OBSERVED, one-off — chat thread header avatar, no Figma source this pass */
+button.avatar { border: none; cursor: pointer; padding: 0; }
+button.avatar:hover { box-shadow: 0 0 0 3px var(--color-secondary-0); }
+button.avatar:active { box-shadow: 0 0 0 3px var(--color-secondary-50); }
+
+/* Initials fallback (no real photo asset exists for Chat's contacts —
+   no Figma source this pass, see handoff.md) — matches Gluestack's
+   Avatar + AvatarFallbackText pattern used for Home's initials avatars,
+   just built with plain text instead of pre-baked vector letterforms. */
+.avatar--initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-typography-white);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-bold);
+}
+.avatar--md.avatar--initials { font-size: var(--text-md-size); }
+.avatar--xs.avatar--initials { font-size: var(--text-xs-size); }
+
+/* ---------------------------------------------------------------------
+   CARD LIST / STUDENT CARD
+--------------------------------------------------------------------- */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px; /* observed in Figma card list, not on the formal spacing scale — closest formal step would be --space-3 (12px) or a new 3.5 step */
+  padding: 0 var(--space-6);
+}
+.card {
+  background-color: var(--color-background-surface);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+  overflow: hidden;
+}
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-secondary-50);
+}
+.student-row__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.student-row__name {
+  font-size: var(--heading-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-sm-tracking);
+  color: var(--color-text-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.student-row__meta {
+  font-size: var(--text-sm-size);
+  color: var(--color-primary-500);
+  opacity: var(--opacity-50);
+}
+.student-row__meta-item:first-child::after {
+  content: "";
+  display: inline-block;
+  width: 1px;
+}
+.student-row__meta-item + .student-row__meta-item {
+  margin-left: var(--space-2);
+}
+
+/* ---------------------------------------------------------------------
+   SERVICE ACCORDION ROW
+   Only the chevron button toggles the panel — see handoff.md for the
+   Figma source of the expanded quick-links content.
+--------------------------------------------------------------------- */
+.service-accordion + .service-accordion .service-row {
+  border-top: 1px solid var(--color-secondary-0);
+}
+.service-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  text-align: left;
+}
+.service-row__icon { width: 30px; height: 30px; flex-shrink: 0; }
+.service-row__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.service-row__label {
+  font-size: var(--text-xs-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-500);
+  letter-spacing: 0.2px;
+}
+.service-row__value {
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-primary-500);
+}
+
+/* Only the chevron button expands/collapses the panel — the rest of the
+   row (icon, label, value) is static, non-interactive content. */
+.service-row__toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease;
+}
+.service-row__toggle:hover { background-color: var(--color-secondary-0); }
+.service-row__toggle:active { background-color: var(--color-secondary-50); }
+.service-row__toggle[aria-expanded="true"] { background-color: var(--color-secondary-0); }
+
+.service-row__chevron-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.service-row__chevron {
+  /* Source SVG's native ratio is 6:10.5 (simplifies to 4:7) with
+     preserveAspectRatio="none" — sized here at 2x that ratio (8×14) so it
+     reads clearly instead of being stretched into a square blob (the
+     original bug) or rendered at a barely-visible native 6px width. */
+  width: 8px;
+  height: 14px;
+  transform: rotate(-90deg);
+  transition: transform 160ms ease;
+}
+.service-row__toggle[aria-expanded="true"] .service-row__chevron {
+  transform: rotate(0deg);
+}
+
+.service-panel[hidden] {
+  /* [hidden] and .service-panel{display:flex} have equal specificity, and
+     this stylesheet loads after the UA default — without this override,
+     the flex rule below wins and the panel shows despite the attribute. */
+  display: none;
+}
+.service-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px; /* observed in Figma (node 14790:18207) — a one-off value, not on the formal spacing scale */
+  padding: var(--space-1-5) var(--space-4);
+  background-color: var(--color-secondary-0);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl); /* caps the card's own bottom corners when it's the last open panel */
+}
+/* Reuses .nav-item styling below — same 59×57px "Button-outline" component
+   as the bottom tab bar in Figma, just laid out inline instead of pinned. */
+
+/* ---------------------------------------------------------------------
+   INSTITUTION LOGO FOOTER
+--------------------------------------------------------------------- */
+.institution-footer {
+  position: absolute;
+  z-index: 0; /* behind .app-view's cards (z-index: 1) and .bottom-nav (z-index: 2) */
+  left: 50%;
+  bottom: 91px; /* clears the floating nav bar height + its own offset, observed from Figma */
+  transform: translateX(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 23px 60px;
+  background-color: var(--color-background-surface);
+  opacity: var(--opacity-36);
+  pointer-events: none;
+}
+.institution-footer__logo { width: 100%; height: auto; }
+
+/* ---------------------------------------------------------------------
+   BOTTOM NAV
+--------------------------------------------------------------------- */
+.bottom-nav {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: var(--space-6);
+  transform: translateX(-50%);
+  width: 347px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 4px 10px; /* observed in Figma, one-off — not on the formal spacing scale */
+  background-color: var(--color-typography-white);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-hard-5);
+}
+/* Shared "Button-outline" component (Figma name) — used both in the fixed
+   bottom nav and, reused verbatim, in the service-row quick-links panel. */
+.nav-item {
+  width: 59px;
+  height: 57px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border-radius: var(--radius-md);
+  color: var(--color-primary-900);
+  transition: background-color 120ms ease;
+}
+.nav-item:hover { background-color: var(--color-secondary-0); }
+.nav-item:active { background-color: var(--color-secondary-50); }
+.nav-item__icon { width: 26px; height: 26px; }
+.nav-item__label {
+  font-size: var(--text-2xs-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-900);
+}
+.nav-item[aria-current="page"] {
+  /* Drives inline-SVG icons via currentColor (see screens/menu-semanal.html) —
+     the Home screen's own nav still uses <img src=".svg"> icons, which can't
+     pick up currentColor since a loaded image resource doesn't inherit CSS
+     from its host document. Flagged in handoff.md as a known inconsistency;
+     new screens should prefer inline SVG icons for this reason. */
+  color: var(--color-secondary-500);
+}
+.nav-item[aria-current="page"] .nav-item__label {
+  font-weight: var(--font-weight-extrabold);
+}
+
+/* ---------------------------------------------------------------------
+   NOTIFICATIONS SHEET (interaction not shown in Figma — flagged assumption)
+--------------------------------------------------------------------- */
+.sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(26, 33, 58, 0.4); /* primary-900 at reduced opacity, no dedicated overlay token exists yet */
+  display: flex;
+  align-items: flex-end;
+  z-index: 10;
+  animation: fade-in 160ms ease;
+}
+.sheet {
+  width: 100%;
+  background-color: var(--color-background-surface);
+  border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+  padding: var(--space-3) var(--space-6) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  animation: slide-up 200ms ease;
+}
+.sheet__handle {
+  width: 36px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-300);
+  margin: 0 auto;
+}
+.sheet__title {
+  margin: 0;
+  font-size: var(--text-xl-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-500);
+}
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.notification-item {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+.notification-item__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-500);
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+.notification-item__title {
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-900);
+}
+.notification-item__meta {
+  font-size: var(--text-2xs-size);
+  color: var(--color-primary-500);
+  opacity: var(--opacity-50);
+  margin-top: 2px;
+}
+
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* =======================================================================
+   MENÚ SEMANAL SCREEN (screens/menu-semanal.html)
+   ======================================================================= */
+
+.screen-header {
+  position: sticky;
+  top: 0;
+  z-index: 1; /* Figma's static frame doesn't model scroll behavior — pinning
+                 the header on scroll is an assumption, not pulled from Figma. */
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 var(--space-6);
+  background-color: var(--color-background-app);
+}
+.screen-header__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: var(--text-xl-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.2px;
+  color: var(--color-secondary-500);
+  white-space: nowrap;
+}
+.screen-header__back,
+.screen-header__help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease;
+}
+.screen-header__back:hover, .screen-header__help:hover { background-color: var(--color-secondary-0); }
+.screen-header__back:active, .screen-header__help:active { background-color: var(--color-secondary-50); }
+.screen-header__back img { width: 20px; height: 20px; }
+.screen-header__help img { width: 24px; height: 24px; }
+
+.screen-menu-semanal__body {
+  padding: 0 var(--space-6) var(--space-6);
+}
+.screen-menu-semanal__body > * + * {
+  margin-top: var(--space-3);
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+}
+.profile-card__name {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.2px;
+  color: var(--color-primary-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-card__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.profile-card__chevron img {
+  width: 8px;
+  height: 14px;
+  /* Renders as --color-neutral-600 (#747474) via the SVG's own baked-in
+     fallback fill, not via CSS — a <img src=".svg"> can't be recolored
+     from the host page. See the nav-item note below for the general issue. */
+}
+
+.pagination-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: var(--space-1);
+}
+.pagination-dots__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-border-300);
+}
+.pagination-dots__dot--active {
+  background-color: var(--color-secondary-500);
+}
+
+.segmented-toggle {
+  display: flex;
+  gap: 38px; /* OBSERVED, one-off from Figma — no matching space-scale step */
+  padding: var(--space-1) 0;
+  background-color: var(--color-secondary-100);
+  border-radius: var(--radius-full);
+}
+.segmented-toggle__option {
+  flex: 1;
+  height: 40px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-0);
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.segmented-toggle__option--active {
+  background-color: var(--color-background-card);
+  color: var(--color-secondary-500);
+  box-shadow: var(--shadow-hard-5);
+}
+
+.day-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2);
+  background-color: var(--color-background-card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-soft);
+}
+.day-selector__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 48px;
+  height: 56px;
+  border-radius: var(--radius-xl);
+  font-family: var(--font-family-day-selector);
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+.day-selector__day:hover { background-color: var(--color-secondary-0); }
+.day-selector__letter {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: var(--color-raw-day-label);
+}
+.day-selector__number {
+  font-size: var(--text-xl-size);
+  font-weight: 600;
+  color: var(--color-raw-day-number);
+}
+.day-selector__day--active {
+  background-color: var(--color-secondary-500);
+  /* OBSERVED, one-off — Figma's own "Button:shadow" layer, distinct from both named shadow tokens */
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+.day-selector__day--active .day-selector__letter {
+  color: var(--color-typography-white);
+  opacity: 0.8; /* OBSERVED, one-off — Figma's "opacity-80" on this label only; doesn't match any step on --opacity-* */
+}
+.day-selector__day--active .day-selector__number {
+  color: var(--color-typography-white);
+}
+
+.date-heading {
+  margin: 0;
+  font-size: 18px; /* OBSERVED — Poppins Semibold 18px has no named Figma variable behind it */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-raw-day-number);
+  text-align: center;
+}
+
+.meal-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.dish-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: 17px; /* OBSERVED, one-off — not on the formal space scale */
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-100);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+}
+.dish-card__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-secondary-500);
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-500);
+}
+.dish-card__badge--icon {
+  border: none;
+}
+.dish-card__badge-icon {
+  width: 22px;
+  height: 22px;
+}
+.dish-card__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.dish-card__label {
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-secondary-500);
+}
+.dish-card__name {
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-raw-dish-name);
+}
+
+.celiac-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-2) var(--space-4) var(--space-5); /* approximates Figma's asymmetric pl-21/pr-1/py-9 */
+  background-color: var(--color-raw-celiac-bg);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-hard-5);
+}
+.celiac-card__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-raw-celiac-heading);
+}
+.celiac-card__heading-icon { width: 16px; height: 16px; flex-shrink: 0; }
+.celiac-card__chips {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+.celiac-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--color-tertiary-50);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-500);
+  justify-self: start;
+}
+.celiac-chip__icon { width: 13.33px; height: 13.33px; flex-shrink: 0; }
+
+.button-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+  font-family: var(--font-family-alt);
+  font-weight: var(--font-weight-semibold);
+  font-size: 18px; /* CONFIRMED "Text-semibold/lg : 18px" (Roboto) */
+  transition: background-color 120ms ease;
+}
+.button-cta:hover { background-color: var(--color-primary-500); }
+.button-cta:active { background-color: var(--color-primary-900); }
+
+/* ---------------------------------------------------------------------
+   MOOD ICON (Menú Semanal report screen — no Figma source, see handoff.md)
+--------------------------------------------------------------------- */
+.dish-card__mood {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  color: var(--color-typography-white); /* face features use currentColor, inline SVG so this actually works */
+}
+.dish-card__mood--happy   { background-color: var(--color-mood-happy); }
+.dish-card__mood--neutral { background-color: var(--color-mood-neutral); }
+.dish-card__mood--sad     { background-color: var(--color-mood-sad); }
+.dish-card__mood-icon { width: 20px; height: 20px; }
+
+/* ---------------------------------------------------------------------
+   OBSERVACIONES CARD (Menú Semanal report screen — no Figma source)
+--------------------------------------------------------------------- */
+.observaciones-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background-color: var(--color-border-50);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+}
+.observaciones-card__heading {
+  margin: 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-500);
+}
+.observaciones-card__text {
+  margin: 0;
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-raw-dish-name);
+}
+
+/* ---------------------------------------------------------------------
+   POPOVER (help icon → "Alimentación saludable")
+   Approximates Gluestack v5's Popover/PopoverContent/PopoverArrow/PopoverBody.
+   No backdrop by design — see handoff.md.
+--------------------------------------------------------------------- */
+.popover[hidden] {
+  /* Same specificity pitfall as the service-panel bug from an earlier pass
+     — .popover below sets display:flex, which would otherwise beat the UA
+     default [hidden]{display:none} since they tie on specificity and this
+     stylesheet loads later. See that section's note for the full story. */
+  display: none;
+}
+.popover {
+  position: absolute;
+  top: 100%;
+  left: var(--space-6);
+  right: var(--space-6);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  opacity: 0;
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+  pointer-events: none;
+}
+.popover--open {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+.popover__arrow {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  margin-right: 28px; /* roughly under the help icon */
+  margin-bottom: -7px; /* tucks half-behind the card so the seam is hidden */
+  background-color: var(--color-typography-0);
+  transform: rotate(45deg);
+  position: relative;
+  z-index: 1;
+}
+.popover__card {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-typography-0);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard-5);
+}
+.popover__title {
+  margin: 0;
+  font-size: var(--heading-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-sm-tracking);
+  color: var(--color-primary-500);
+}
+.popover__body {
+  margin: 0;
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-900);
+}
+.popover__button {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary-500);
+  color: var(--color-typography-white);
+  font-size: var(--text-sm-size);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 120ms ease;
+}
+.popover__button:hover { background-color: var(--color-primary-900); }
+/* prefers-reduced-motion already handled by the global `*` rule elsewhere in this file */
+
+/* =======================================================================
+   ASISTENCIA FAB + TRAY (asistencia-tray.js — global overlay, any screen)
+   ======================================================================= */
+
+/* The Asistencia nav item keeps its label but not its own icon — the FAB
+   below sits on top of it. An empty .nav-item__icon spacer (added in
+   index.html / menu-shared.js) keeps the label's vertical position
+   matching its siblings without special-casing the flex alignment. */
+.nav-item--asistencia .nav-item__icon {
+  visibility: hidden;
+}
+
+.asistencia-fab {
+  position: absolute;
+  left: 50%;
+  top: -18px; /* overlaps 18px above the nav bar's own top edge */
+  transform: translateX(-50%);
+  width: 59px;
+  height: 61px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary-300);
+  border-radius: 80px; /* exceeds half of either dimension — reads as fully rounded */
+  box-shadow: 0px 2px 5px rgba(38, 38, 38, 0.1); /* OBSERVED, one-off — lighter blur than --shadow-hard-5 (10px), not the same token */
+  color: var(--color-typography-white);
+  transition: transform 100ms ease-out, opacity 100ms ease-out;
+}
+.asistencia-fab:active {
+  transform: translateX(-50%) scale(0.96);
+  opacity: 0.7;
+}
+.asistencia-fab__icon {
+  width: 30px;
+  height: 30px;
+}
+
+.tray-backdrop {
+  /* No [hidden] override needed here, unlike .asistencia-tray below —
+     this rule never sets `display`, so the UA default [hidden]{display:none}
+     applies cleanly with nothing to out-specificity it. */
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background-color: var(--color-primary-500);
+  opacity: 0;
+  transition: opacity 300ms ease-out;
+  pointer-events: none;
+}
+.tray-backdrop--open {
+  opacity: 0.8;
+  pointer-events: auto;
+}
+
+.asistencia-tray[hidden] {
+  display: none;
+}
+.asistencia-tray {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 21;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: calc(100% - 44px); /* leaves room below the status bar */
+  padding: var(--space-6);
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-100);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0; /* top corners only */
+  box-shadow: var(--shadow-hard-5);
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 300ms ease-out, opacity 300ms ease-out;
+  overflow-y: auto;
+  touch-action: pan-y;
+}
+.asistencia-tray--open {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.asistencia-tray__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.asistencia-tray__title {
+  margin: 0;
+  font-size: var(--heading-xl-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-xl-tracking);
+  color: var(--color-text-900);
+}
+.asistencia-tray__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-900);
+  transition: background-color 120ms ease;
+}
+.asistencia-tray__close:hover { background-color: var(--color-secondary-0); }
+
+.asistencia-action {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  width: 100%;
+  padding: var(--space-4);
+  background-color: var(--color-secondary-0);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+  text-align: left;
+  transition: background-color 120ms ease;
+}
+.asistencia-action + .asistencia-action {
+  margin-top: var(--space-2);
+}
+.asistencia-action:hover { background-color: var(--color-secondary-50); }
+.asistencia-action:active { background-color: var(--color-secondary-100); }
+
+.asistencia-action__icon-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 59px;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-secondary-50);
+  border-radius: var(--radius-md);
+}
+.asistencia-action__icon { width: 30px; height: 30px; }
+.asistencia-action__badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+.asistencia-action__text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--color-primary-500);
+}
+.asistencia-action__title {
+  font-size: 18px; /* CONFIRMED "Text-semibold/lg" */
+  font-weight: var(--font-weight-semibold);
+}
+.asistencia-action__desc {
+  font-size: var(--text-xs-size);
+  font-weight: var(--font-weight-regular);
+}
+.asistencia-action__chevron {
+  flex-shrink: 0;
+  width: 8px;
+  height: 14px;
+}
+
+.asistencia-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-alert-peach);
+  border-radius: var(--radius-md);
+}
+.asistencia-alert__icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+}
+.asistencia-alert__text {
+  margin: 0;
+  font-size: var(--text-xs-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-primary-600);
+}
+
+/* =======================================================================
+   SOLICITAR ASISTENCIA SCREEN (screens/solicitar-asistencia.html)
+   ======================================================================= */
+
+.solicitar-calendar {
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-hard-5);
+  padding: 11px var(--space-4); /* 11px vertical is a one-off from Figma, not on the space scale */
+}
+.solicitar-calendar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.solicitar-calendar__nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  color: var(--color-text-900);
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease;
+}
+.solicitar-calendar__nav-button:hover { background-color: var(--color-secondary-0); }
+.solicitar-calendar__month-label {
+  font-size: var(--heading-md-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-md-tracking);
+  color: var(--color-primary-500);
+}
+.solicitar-calendar__weekdays,
+.solicitar-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.solicitar-calendar__weekdays {
+  padding-top: var(--space-2);
+}
+.solicitar-calendar__weekdays span {
+  text-align: center;
+  padding: 4px 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-100);
+}
+.solicitar-calendar__grid {
+  gap: 8px 3px;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+  border-radius: var(--radius-full);
+  background: none;
+  font-size: var(--text-md-size);
+  color: var(--color-primary-500);
+  transition: background-color 120ms ease;
+}
+.calendar-day--blank {
+  visibility: hidden;
+}
+.calendar-day--available:hover { background-color: var(--color-secondary-0); }
+.calendar-day--available:active { background-color: var(--color-secondary-50); }
+.calendar-day--weekend {
+  background-color: var(--color-raw-weekend-bg);
+  color: var(--color-raw-weekend-text);
+  cursor: default;
+}
+.calendar-day--contratado {
+  background-color: var(--color-success-background);
+  color: var(--color-raw-success-text);
+  cursor: default;
+}
+.calendar-day--festivo {
+  background-color: var(--color-error-background);
+  color: var(--color-error-300);
+  cursor: default;
+}
+.calendar-day--today {
+  background-color: var(--color-success-background);
+  border-color: var(--color-success-500);
+  color: var(--color-success-500);
+  font-weight: var(--font-weight-extrabold);
+  font-size: 18px;
+}
+.calendar-day--selected {
+  background-color: var(--color-secondary-500);
+  border-color: transparent;
+  color: var(--color-typography-white);
+}
+.calendar-day--today.calendar-day--selected {
+  /* Not an explicitly specified combination — today's ring kept alongside
+     the selected fill/check so neither state visually disappears. */
+  border-color: var(--color-success-500);
+  background-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+}
+.calendar-day__check,
+.calendar-day svg {
+  width: 16px;
+  height: 16px;
+}
+
+.solicitar-calendar__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  padding-top: var(--space-2);
+}
+.solicitar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs-size);
+  color: var(--color-primary-500);
+}
+.solicitar-legend-item__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+.solicitar-legend-item__dot--contratados   { background-color: var(--color-success-200); }
+.solicitar-legend-item__dot--festivos      { background-color: var(--color-error-100); }
+.solicitar-legend-item__dot--seleccionados { background-color: var(--color-secondary-100); }
+
+/* This screen's own DESAYUNO/COMIDA toggle — visually distinct from
+   Menú Semanal's .segmented-toggle pill-track pattern, per spec. */
+.asistencia-toggle {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  padding: var(--space-2);
+}
+.asistencia-toggle__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-100);
+  color: var(--color-primary-300);
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-extrabold);
+  transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+.asistencia-toggle__option--active {
+  background-color: var(--color-secondary-500);
+  border-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+}
+.asistencia-toggle__check {
+  display: none;
+  width: 15px;
+  height: 15px;
+}
+.asistencia-toggle__option--active .asistencia-toggle__check {
+  display: inline-flex;
+}
+
+.asistencia-info-banner,
+.asistencia-selection-banner {
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-hard-5);
+  padding: var(--space-4) var(--space-6);
+  text-align: center;
+}
+.asistencia-info-banner__text {
+  margin: 0;
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-primary-200);
+}
+.asistencia-selection-banner__label {
+  margin: 0 0 2px;
+  font-size: var(--text-xs-size);
+  color: var(--color-primary-200);
+}
+.asistencia-selection-banner__value {
+  margin: 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-500);
+}
+
+/* ---------------------------------------------------------------------
+   CENTERED MODAL (Modal 3 confirm / Modal 4 thanks) — a different
+   pattern from the Asistencia tray's bottom sheet, per spec: "Centered
+   modal (not a bottom sheet)". Fade + scale, matching the popover's
+   animation language for centered dialogs (the tray, an edge-anchored
+   sheet, slides instead — see handoff.md for that distinction).
+--------------------------------------------------------------------- */
+.modal-backdrop[hidden] {
+  display: none;
+}
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background-color: var(--color-modal-backdrop);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+  pointer-events: none;
+}
+.modal-backdrop--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  background-color: var(--color-background-card);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-hard-5);
+  text-align: center;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform 200ms ease-out, opacity 200ms ease-out;
+}
+.modal-backdrop--open .modal-card {
+  transform: scale(1);
+  opacity: 1;
+}
+.modal-card__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--color-text-900);
+  transition: background-color 120ms ease;
+}
+.modal-card__close:hover { background-color: var(--color-secondary-0); }
+.modal-card__title {
+  margin: 0;
+  padding-right: 32px; /* clears the close button */
+  font-size: var(--heading-md-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-500);
+  line-height: 1.3;
+}
+.modal-card__body {
+  margin: 0;
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+  color: var(--color-text-900);
+}
+.modal-card__actions {
+  display: flex;
+  gap: var(--space-6);
+}
+.modal-card__text-button {
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-secondary-500);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  transition: background-color 120ms ease;
+}
+.modal-card__text-button:hover { background-color: var(--color-secondary-0); }
+.modal-card__brand { color: var(--color-secondary-500); }
+.modal-card__thanks-text {
+  margin: 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-900);
+  line-height: 1.5;
+}
+
+/* =======================================================================
+   CHAT — contact list (screens/chat.html)
+   ======================================================================= */
+
+.chat-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.chat-contact-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  padding: var(--space-4);
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-50);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-hard-5);
+  text-align: left;
+  transition: background-color 120ms ease;
+}
+.chat-contact-card:hover { background-color: var(--color-secondary-0); }
+.chat-contact-card:active { background-color: var(--color-secondary-50); }
+.chat-contact-card__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.chat-contact-card__name {
+  font-size: var(--heading-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-sm-tracking);
+  color: var(--color-text-900);
+}
+.chat-contact-card__meta {
+  font-size: var(--text-sm-size);
+  color: var(--color-primary-200);
+}
+.chat-contact-card__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-0);
+  color: var(--color-secondary-500);
+}
+.chat-contact-card__icon svg { width: 24px; height: 24px; }
+
+/* =======================================================================
+   CHAT — conversation thread (screens/chat-conversation.html)
+   No Figma source this pass — built from screenshot + spec text only.
+   See handoff.md.
+   ======================================================================= */
+
+.chat-thread-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--color-background-app);
+}
+.chat-thread-header__back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease;
+}
+.chat-thread-header__back:hover { background-color: var(--color-secondary-0); }
+.chat-thread-header__back img { width: 20px; height: 20px; }
+.chat-thread-header__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.chat-thread-header__name {
+  font-size: var(--heading-sm-size);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--heading-sm-tracking);
+  color: var(--color-text-900);
+}
+.chat-thread-header__subtitle {
+  font-size: var(--text-sm-size);
+  color: var(--color-primary-200);
+}
+
+.app-view.chat-thread-view {
+  padding-bottom: 84px; /* clears the fixed input bar — OBSERVED estimate, not from Figma (none this pass) */
+}
+
+.chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--space-6) var(--space-4);
+}
+
+.chat-date-divider {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-2) 0;
+}
+.chat-date-divider__label {
+  padding: var(--space-1) var(--space-3);
+  background-color: var(--color-secondary-0);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-500);
+}
+
+.chat-message {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+}
+.chat-message--incoming { align-items: flex-start; align-self: flex-start; }
+.chat-message--outgoing { align-items: flex-end; align-self: flex-end; }
+
+.chat-bubble {
+  padding: var(--space-3);
+  font-size: var(--text-sm-size);
+  line-height: var(--text-sm-line);
+}
+.chat-bubble--incoming {
+  background-color: var(--color-secondary-0);
+  color: var(--color-text-900);
+  /* Flat top-left corner, per spec — the rest rounded. */
+  border-radius: var(--radius-xs) var(--radius-xl) var(--radius-xl) var(--radius-xl);
+}
+.chat-bubble--outgoing {
+  background-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+  /* Mirrored: flat top-right corner. */
+  border-radius: var(--radius-xl) var(--radius-xs) var(--radius-xl) var(--radius-xl);
+}
+.chat-bubble__text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+.chat-bubble__image {
+  display: block;
+  margin: calc(var(--space-3) * -1) calc(var(--space-3) * -1) var(--space-2);
+  border-radius: var(--radius-xs) var(--radius-xl) 0 0; /* matches the bubble's own flat corner */
+  overflow: hidden;
+}
+.chat-bubble__image svg { display: block; width: 100%; height: auto; }
+
+.chat-message__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-top: 2px;
+  padding: 0 var(--space-1);
+}
+.chat-message__time {
+  font-size: var(--text-2xs-size);
+  color: var(--color-primary-200);
+}
+.chat-message__receipt {
+  display: flex;
+  color: var(--color-secondary-500);
+}
+
+.chat-input-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-background-card);
+  border-top: 1px solid var(--color-border-100);
+}
+.chat-input-bar__attach {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  color: var(--color-secondary-500);
+  transition: background-color 120ms ease;
+}
+.chat-input-bar__attach:hover { background-color: var(--color-secondary-0); }
+.chat-input-bar__field {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 0 var(--space-4);
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-0);
+  font-family: var(--font-family-base);
+  font-size: var(--text-sm-size);
+  color: var(--color-text-900);
+}
+.chat-input-bar__field::placeholder { color: var(--color-primary-200); }
+.chat-input-bar__field:focus-visible {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 2px;
+}
+.chat-input-bar__send {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-secondary-500);
+  color: var(--color-typography-white);
+  transition: background-color 120ms ease;
+}
+.chat-input-bar__send:hover { background-color: var(--color-primary-500); }
+.chat-input-bar__send:active { background-color: var(--color-primary-900); }
+
+/* =======================================================================
+   GESTIÓN — row list (screens/gestion.html)
+   No Figma source this pass — built from spec text only. See handoff.md.
+   ======================================================================= */
+
+.gestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.gestion-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  background-color: var(--color-background-card);
+  border: 1px solid var(--color-border-100); /* hairline, per spec */
+  border-radius: var(--radius-xl);
+  text-align: left;
+  transition: background-color 120ms ease, transform 100ms ease-out, opacity 100ms ease-out;
+}
+.gestion-row:hover { background-color: var(--color-secondary-0); }
+.gestion-row:active {
+  background-color: var(--color-secondary-50);
+  transform: scale(0.98);
+  opacity: 0.85;
+}
+.gestion-row__icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--color-secondary-500);
+}
+.gestion-row__icon svg { width: 24px; height: 24px; }
+.gestion-row__label {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--text-md-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-900);
+}
+.gestion-row__chevron {
+  flex-shrink: 0;
+  width: 8px;
+  height: 14px;
+}
+
+.gestion-row--danger {
+  margin-top: var(--space-6); /* "visually separated (extra top margin)", per spec */
+}
+/* Reuses the existing error-tint tokens from Solicitar Asistencia's
+   calendar (light red backgrounds) rather than introducing a raw rgba()
+   outside the token system. */
+.gestion-row--danger:hover { background-color: var(--color-error-background); }
+.gestion-row--danger:active { background-color: var(--color-error-100); }
+.gestion-row--danger .gestion-row__icon,
+.gestion-row--danger .gestion-row__label {
+  color: var(--color-danger);
+}
+
+/* =======================================================================
+   STUB SCREENS (screens/stub-screen.js — Perfil, Facturación, Contratos,
+   Documentos, Notificaciones, Ajustes)
+   ======================================================================= */
+.stub-placeholder-text {
+  margin: var(--space-8) 0 0;
+  text-align: center;
+  font-size: var(--text-sm-size);
+  color: var(--color-primary-500);
+  opacity: var(--opacity-50);
+}

@@ -1,0 +1,227 @@
+/*
+  tokens.css
+  Design tokens extracted from Figma ("Activities Design Kit_based on GlueStack UI").
+  Semantic names mirror Gluestack v5's config.ts theme shape (colors / space / radius /
+  fontSize / breakpoints) so this file and tokens.json can be read side by side.
+
+  Provenance markers on each block:
+    CONFIRMED    – value read directly from a Figma variable used in the Home/Dashboard screen.
+    OBSERVED     – value read from the generated layer code but not bound to a named Figma variable.
+    ASSUMED      – not present anywhere in this screen; filled in from Gluestack v5 defaults so
+                   the scale isn't full of holes. Re-check against Figma before relying on these.
+  See handoff.md for the full narrative on anything flagged ASSUMED or inconsistent.
+*/
+
+:root {
+  /* ---------------------------------------------------------------------
+     COLOR — brand ramps
+     Only the steps actually used in the Dashboard screen are CONFIRMED.
+     Surrounding steps in each ramp are ASSUMED (linear-interpolated) so the
+     scale is usable elsewhere; replace with real Figma values as more
+     screens are pulled in.
+  --------------------------------------------------------------------- */
+  --color-primary-900: #1a213a;   /* CONFIRMED */
+  --color-primary-600: #232c4e;   /* CONFIRMED — Asistencia tray alert body text */
+  --color-primary-500: #2c3761;   /* CONFIRMED */
+  --color-primary-300: #565f81;   /* CONFIRMED ("Primary/primary300") — Asistencia FAB background */
+  --color-primary-200: #6b7390;   /* CONFIRMED ("Primary/primary200") — Solicitar Asistencia bottom card text */
+  --color-primary-100: #8087a0;   /* CONFIRMED ("Primary/primary100") — Solicitar Asistencia calendar weekday header letters */
+  --color-primary-50:  #e3e5ec;   /* ASSUMED */
+  --color-primary-0:   #f4f5f8;   /* ASSUMED */
+
+  --color-secondary-500: #3663ca; /* CONFIRMED */
+  --color-secondary-300: #5e82d5; /* CONFIRMED */
+  --color-secondary-100: #aec0ea; /* CONFIRMED — segmented toggle track (Menú Semanal) */
+  --color-secondary-50:  #d6dff4; /* CONFIRMED */
+  --color-secondary-0:   #e8edf9; /* CONFIRMED */
+
+  --color-tertiary-500: #ddb54a;  /* CONFIRMED (breakfast icon accent, allergen chip checkmarks) */
+  --color-tertiary-50:  #f1e1b7; /* CONFIRMED — allergen chip background (Menú Semanal) */
+
+  --color-neutral-600: #747474;  /* CONFIRMED ("Background/background600") — muted chevron-right / disclosure affordance */
+  --color-warning-800: #824417;  /* CONFIRMED ("Warning/warning800") — Asistencia tray alert icon */
+
+  --color-alert-peach: #f6efeb;  /* OBSERVED — Asistencia tray alert background, no named Figma variable */
+  /* "Lavender" action-row background the brief mentioned is already covered
+     by --color-secondary-0 (#e8edf9) — no new token needed for it. */
+
+  /* Mood icons (Menú Semanal report screen) — NO Figma source at all for
+     this screen; these are invented to match the reference screenshot's
+     green/amber/maroon language, not pulled from a design file. Neutral
+     reuses the existing tertiary-500 amber rather than adding a near-duplicate
+     raw hex. See handoff.md. */
+  --color-mood-happy:   #4caf6e; /* OBSERVED, invented — no Figma source */
+  --color-mood-neutral: var(--color-tertiary-500); /* reuses existing confirmed token */
+  --color-mood-sad:     #8c3a5c; /* OBSERVED, invented — no Figma source */
+
+  /* Solicitar Asistencia calendar — "success" (contratado/today) and
+     "error" (festivo) each use TWO different shades in the source file:
+     one for the cell itself, one for the legend dot. Not a build error —
+     captured faithfully, flagged in handoff.md as likely unintentional
+     drift worth a design-system pass. */
+  --color-success-background: #edfcf2; /* CONFIRMED ("success/success-background") — contratado + today cell fill */
+  --color-success-500:        #348352; /* CONFIRMED ("success/success500") — today's ring border + text */
+  --color-success-200:        #84d3a2; /* CONFIRMED ("success/success200") — legend dot ONLY, not used on cells */
+  --color-raw-success-text:   #10b981; /* OBSERVED, no named variable — contratado cell number text (a 3rd, different green) */
+
+  --color-error-background: #fef1f1; /* CONFIRMED ("error/error-background") — festivo cell fill */
+  --color-error-300:        #f87171; /* CONFIRMED ("error/error300") — festivo cell text */
+  --color-error-100:        #fecaca; /* CONFIRMED ("error/error100") — legend dot ONLY, not used on the cell itself */
+
+  /* Weekend cells use raw hex with no named Figma variable at all — the
+     values match Tailwind's default slate-50/slate-400, suggesting the
+     designer reached for a generic palette rather than this app's own
+     tokens for this one state. Flagged in handoff.md. */
+  --color-raw-weekend-bg:   #f8fafc; /* OBSERVED */
+  --color-raw-weekend-text: #94a3b8; /* OBSERVED */
+
+  --color-modal-backdrop: rgba(44, 55, 97, 0.8); /* OBSERVED — same primary500-at-80% used by the Asistencia tray backdrop, given its own named token per your instruction */
+
+  /* ---------------------------------------------------------------------
+     COLOR — text / typography
+  --------------------------------------------------------------------- */
+  --color-text-900:      #262627; /* CONFIRMED */
+  --color-typography-0:  #fefeff; /* CONFIRMED — near-white, used as text/icon fill on dark or saturated fills */
+  --color-typography-white: #ffffff; /* CONFIRMED ("text label - white") */
+  --color-typography-black: #000000; /* CONFIRMED ("Labels/Primary") — raw fallback color baked into some source icon SVGs */
+
+  /* ---------------------------------------------------------------------
+     COLOR — border / outline
+  --------------------------------------------------------------------- */
+  --color-border-50:  #f3f3f3;  /* CONFIRMED */
+  --color-border-100: #e6e6e6;  /* CONFIRMED */
+  --color-border-300: #d3d3d3;  /* CONFIRMED */
+
+  /* ---------------------------------------------------------------------
+     COLOR — background / surface
+  --------------------------------------------------------------------- */
+  --color-background-app:     var(--color-secondary-0); /* CONFIRMED — page background */
+  --color-background-surface: #fbfbfb;                   /* CONFIRMED ("background - light") — Home dashboard card surface */
+  --color-background-card:    #ffffff;                   /* CONFIRMED ("Background/background0") — Menú Semanal card surface. NOT the same value as background-surface above; the two screens pulled from Figma so far use two different "white" card tokens. Flagged in handoff.md — worth reconciling into one before more screens are built. */
+
+  /* ---------------------------------------------------------------------
+     COLOR — semantic / status
+     "error-500" below is an ASSUMPTION: Figma exposed it as
+     "New palette/Default/Primary/Primary1" (#e60000), a token from a
+     *different* library than the rest of the file, on the notification
+     count badge. Flagged in handoff.md — recommend rebuilding that badge
+     on a proper Gluestack error/danger token instead of reusing this raw value as-is.
+  --------------------------------------------------------------------- */
+  --color-info-0:    #ecf8fe;  /* CONFIRMED */
+  --color-error-500: #e60000;  /* OBSERVED, off-system — see handoff.md */
+  --color-danger: var(--color-error-500); /* semantic alias — Gestión's "Cerrar sesión" row. Reuses the existing red per instruction rather than adding a near-duplicate; this is also the token's first *intentional* use, versus error-500's original off-system origin on the notification badge. */
+
+  /* Raw hex values found on the Menú Semanal screen with no named Figma
+     variable behind them at all (not even an off-system one) — each used
+     exactly once or twice. Kept as their own tokens rather than silently
+     reusing a near-but-not-quite-matching ramp step. Flagged in handoff.md. */
+  --color-raw-day-label:      #464554; /* OBSERVED — day-selector weekday letter (L/M/X/J/V) */
+  --color-raw-day-number:     #1b1b23; /* OBSERVED — day-selector date number, inactive; also the date heading text */
+  --color-raw-dish-name:      #111827; /* OBSERVED — dish name text in meal cards */
+  --color-raw-celiac-bg:      #fff9e9; /* OBSERVED — "Menú Celiacos" card background */
+  --color-raw-celiac-heading: #e1a504; /* OBSERVED — "Menú Celiacos" heading text (icon itself stays tertiary-500) */
+  --color-raw-shadow-soft:    rgba(0, 0, 0, 0.05); /* OBSERVED — day-selector's own shadow color, distinct from --shadow-hard-5 */
+
+  /* ---------------------------------------------------------------------
+     SPACING — 4px base unit. Confirmed steps: 0, 0.5, 1.5, 2, 2.5, 3, 4.5, 6, 12.
+     Full scale filled in using the same step*4px formula (ASSUMED where
+     not directly observed) so intermediate spacing needs aren't blocked.
+  --------------------------------------------------------------------- */
+  --space-0:    0px;    /* CONFIRMED */
+  --space-0-5:  2px;    /* CONFIRMED ("Spacing/0point5") */
+  --space-1:    4px;    /* CONFIRMED ("Spacing/1") */
+  --space-1-5:  6px;    /* CONFIRMED */
+  --space-2:    8px;    /* CONFIRMED */
+  --space-2-5:  10px;   /* CONFIRMED — Asistencia tray action-row gap */
+  --space-3:    12px;   /* CONFIRMED */
+  --space-4:    16px;   /* CONFIRMED ("Spacing/4") */
+  --space-4-5:  18px;   /* CONFIRMED ("Spacing/4point5") — new step, Asistencia tray */
+  --space-5:    20px;   /* CONFIRMED ("Spacing/5") */
+  --space-6:    24px;   /* CONFIRMED ("Spacing/6") */
+  --space-8:    32px;   /* ASSUMED */
+  --space-12:   48px;   /* CONFIRMED (avatar size) */
+  --space-16:   64px;   /* ASSUMED */
+
+  /* ---------------------------------------------------------------------
+     RADIUS
+     "full", "none", "sm", "md", and "lg" are all real Figma variables now
+     ("Border radius/md"=6 confirmed via the Asistencia tray). The card
+     corner radius (12px, --radius-xl) is NOT a separate radius token in
+     the source file — it literally reuses --space-3. Flagged in
+     handoff.md; remaining steps are ASSUMED from Gluestack v5 defaults
+     for scale completeness.
+  --------------------------------------------------------------------- */
+  --radius-none: 0px;      /* CONFIRMED ("Border radius/none") */
+  --radius-xs:   2px;      /* ASSUMED */
+  --radius-sm:   4px;      /* CONFIRMED ("Border radius/sm") — popover "Entendido!" button */
+  --radius-md:   6px;      /* CONFIRMED ("Border radius/md") — Asistencia tray icon frame + alert box */
+  --radius-lg:   8px;      /* CONFIRMED ("Border radius/lg") — popover card */
+  --radius-xl:   12px;     /* OBSERVED — card corners (reuses --space-3, see handoff.md) */
+  --radius-2xl:  16px;     /* ASSUMED */
+  --radius-pill: 80px;     /* OBSERVED — bottom nav bar container */
+  --radius-full: 9999px;   /* CONFIRMED — avatars, badges */
+
+  /* ---------------------------------------------------------------------
+     TYPOGRAPHY
+  --------------------------------------------------------------------- */
+  --font-family-base: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* CONFIRMED */
+  --font-family-alt: 'Roboto', sans-serif; /* CONFIRMED — the 👋 glyph run on Home, and the "Consultar informe" button label on Menú Semanal. Renamed from "emoji-fallback" once a second real use turned up; still off-system relative to the Poppins-based type scale, see handoff.md. */
+  --font-family-day-selector: 'Hanken Grotesk', sans-serif; /* CONFIRMED, off-system — Menú Semanal's weekday/date selector uses a 3rd font family entirely. Flagged in handoff.md. */
+
+  --font-weight-regular:   400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-extrabold: 800;
+
+  /* text-{weight}/{size} pairs, named like Gluestack's fontSize/fontWeight combos */
+  --text-2xs-size: 10px; --text-2xs-line: 1;    /* CONFIRMED */
+  --text-xs-size:  12px; --text-xs-line: 1;     /* CONFIRMED */
+  --text-sm-size:  14px; --text-sm-line: 21px;  /* CONFIRMED */
+  --text-md-size:  16px; --text-md-line: 1;     /* CONFIRMED */
+  --text-xl-size:  20px; --text-xl-line: 1;     /* CONFIRMED */
+
+  --heading-sm-size: 16px;    /* CONFIRMED */
+  --heading-sm-tracking: 0.2px; /* CONFIRMED */
+  --heading-md-size: 18px;    /* CONFIRMED ("Heading/md") — Solicitar Asistencia calendar month label */
+  --heading-md-tracking: 0.2px; /* CONFIRMED */
+  --heading-xl-size: 24px;    /* CONFIRMED ("Heading/xl") — Asistencia tray title */
+  --heading-xl-tracking: 0.2px; /* CONFIRMED */
+
+  /* ---------------------------------------------------------------------
+     OPACITY
+     0 and 20% are real tokens; 50% and 36% are raw values baked into
+     layers (student sub-label, institution logo) with no named token
+     behind them — flagged in handoff.md as candidates to formalize.
+  --------------------------------------------------------------------- */
+  --opacity-0:  0;      /* CONFIRMED */
+  --opacity-20: 0.2;    /* CONFIRMED */
+  --opacity-36: 0.36;   /* OBSERVED, one-off — institution logo footer */
+  --opacity-50: 0.5;    /* OBSERVED, one-off — student sub-label ("CEIP Pío XII 3 · Primero") */
+
+  /* ---------------------------------------------------------------------
+     SHADOW
+  --------------------------------------------------------------------- */
+  --shadow-hard-5: 0px 2px 10px rgba(38, 38, 38, 0.10); /* CONFIRMED (hardShadow:5) — card + bottom nav */
+  --shadow-soft: 0px 1px 2px rgba(0, 0, 0, 0.05); /* OBSERVED — not a named token, weekly day-selector's own shadow on Menú Semanal */
+
+  /* ---------------------------------------------------------------------
+     BREAKPOINTS
+     This screen is a single mobile frame (390×844); no breakpoint data
+     exists in the file. Values below are Gluestack v5 defaults, ASSUMED
+     wholesale — treat as placeholders until a tablet/desktop frame shows up.
+  --------------------------------------------------------------------- */
+  --breakpoint-base: 0px;    /* ASSUMED */
+  --breakpoint-sm:   480px;  /* ASSUMED */
+  --breakpoint-md:   768px;  /* ASSUMED */
+  --breakpoint-lg:   992px;  /* ASSUMED */
+  --breakpoint-xl:   1280px; /* ASSUMED */
+
+  /* ---------------------------------------------------------------------
+     MOBILE FRAME (prototype chrome only — not a design token, not part
+     of the Gluestack handoff; exists so the browser prototype reads as a
+     phone screen. Devs building the real RN app should ignore this block.)
+  --------------------------------------------------------------------- */
+  --frame-width: 390px;
+  --frame-height: 844px;
+}
